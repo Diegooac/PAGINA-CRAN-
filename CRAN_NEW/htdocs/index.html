@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Calificaciones Registradas</title>
+  <script type="module" src="js/libs/manejaErrores.js"></script>
+</head>
+<body>
+
+  <h1>Calificaciones Registradas</h1>
+
+  <div id="frase" style="background:#f0f4f8; padding:15px; border-radius:8px; margin-bottom:20px;">
+    <strong>Frase motivacional:</strong>
+    <p id="texto-frase">Cargando...</p>
+  </div>
+
+  <p><a href="agrega.html">Agregar</a></p>
+    
+<button id="btnSaludo">Probar JSON</button>
+<p id="resultado"></p>
+    
+  <ul id="lista">
+    <li><progress max="100">Cargando…</progress></li>
+  </ul>
+
+  <script type="module">
+    import { descargaVista } from "./js/libs/descargaVista.js";
+    descargaVista("php/calificacion-vista-index.php");
+  </script>
+
+ <script>
+function cargarFrase() {
+  fetch("https://api.adviceslip.com/advice")
+    .then(res => res.json())
+    .then(data => {
+      const frase = data.slip.advice;
+
+      // Traducción automática
+      fetch("https://api.mymemory.translated.net/get?q=" + frase + "&langpair=en|es")
+        .then(res => res.json())
+        .then(trad => {
+          document.getElementById("texto-frase").innerHTML =
+            `"${trad.responseData.translatedText}"`;
+        });
+    })
+    .catch(() => {
+      document.getElementById("texto-frase").innerText =
+        "Sigue adelante, tú puedes";
+    });
+}
+
+cargarFrase();
+</script>
+    <script type="module">
+  import { consume } from "./js/libs/consume.js"
+  import { enviaJsonRecibeJson } from "./js/libs/enviaJsonRecibeJson.js"
+  import { muestraError } from "./js/libs/muestraError.js"
+
+  document.getElementById("btnSaludo").addEventListener("click", procesaJson)
+
+  async function procesaJson() {
+    try {
+      const datos = {
+        saludo: "Hola",
+        nombre: "Prueba Json"
+      }
+
+      const respuesta = await consume(
+        enviaJsonRecibeJson("php/json.php", datos)
+      )
+
+      const json = await respuesta.json()
+
+      alert(json)
+
+    } catch (error) {
+      muestraError(error)
+    }
+  }
+</script>
+
+</body>
+</html>

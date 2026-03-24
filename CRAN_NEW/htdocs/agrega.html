@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Agregar Calificación</title>
+  <script type="module" src="js/libs/manejaErrores.js"></script>
+</head>
+<body>
+
+  <form id="formulario">
+    <h1>Agregar Calificación</h1>
+
+    <p><a href="/index.html">Cancelar</a></p>
+
+    <p>
+      <label>Nombre *
+        <input type="text" name="nombre" required>
+      </label>
+    </p>
+
+    <p>
+      <label>Apellido Paterno *
+        <input type="text" name="apellidop" required>
+      </label>
+    </p>
+
+    <p>
+      <label>Apellido Materno *
+        <input type="text" name="apellidom" required>
+      </label>
+    </p>
+
+    <p>
+      <label>Materia *
+        <input type="text" name="materia" required>
+      </label>
+    </p>
+
+    <p>
+      <label>Calificación *
+       <input type="number" step="0.1" min="1" max="10" name="calificacion" required>
+      </label>
+    </p>
+
+    <p>* Obligatorio</p>
+
+    <p><button type="submit">Agregar</button></p>
+  </form>
+
+  <script type="module">
+    import { submitAccion } from "./js/libs/submitAccion.js";
+
+    const formulario = document.getElementById("formulario");
+
+    formulario.addEventListener("submit", (event) =>
+      submitAccion(event, "php/calificacion-agrega.php", formulario, "/index.html", "Guardado correctamente")
+    );
+  </script>
+
+</body>
+</html>

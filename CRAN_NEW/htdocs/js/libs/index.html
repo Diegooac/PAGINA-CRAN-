@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Render de calificaciones en el cliente</title>
+  <script type="module" src="js/lib/manejaErrores.js"></script>
+</head>
+<body>
+  <h1>Render de calificaciones en el cliente</h1>
+
+  <dl id="lista">
+    <dt>Cargando…</dt>
+    <dd><progress max="100">Cargando…</progress></dd>
+  </dl>
+
+  <script type="module">
+    import { consume } from "./consume.js"
+    import { recibeJson } from "./recibeJson.js"
+
+    descargaDatos()
+
+    async function descargaDatos() {
+      const respuesta = await consume(recibeJson("../../php/obtener.php"))
+      const json = await respuesta.json()
+
+      let render = ""
+
+      for (const modelo of json) {
+        const nombre = typeof modelo.nombre === "string" ? modelo.nombre : ""
+        const apellidop = typeof modelo.apellidop === "string" ? modelo.apellidop : ""
+        const apellidom = typeof modelo.apellidom === "string" ? modelo.apellidom : ""
+        const materia = typeof modelo.materia === "string" ? modelo.materia : ""
+        const calificacion = modelo.calificacion ?? ""
+
+        render += `
+          <dt>${nombre} ${apellidop} ${apellidom}</dt>
+          <dd>${materia}: ${calificacion}</dd>
+        `
+      }
+
+      lista.innerHTML = render
+    }
+  </script>
+</body>
+</html>

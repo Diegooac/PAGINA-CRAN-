@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Modificar Calificación</title>
+  <script type="module" src="js/libs/manejaErrores.js"></script>
+</head>
+<body>
+
+  <form id="formulario">
+    <h1>Modificar Calificación</h1>
+
+    <p><a href="/index.html">Cancelar</a></p>
+
+      
+    <input name="id" type="hidden">
+
+    <p>
+      <label>Nombre *
+        <input name="nombre" required>
+      </label>
+    </p>
+
+    <p>
+      <label>Apellido Paterno *
+        <input name="apellidop" required>
+      </label>
+    </p>
+
+    <p>
+      <label>Apellido Materno *
+        <input name="apellidom" required>
+      </label>
+    </p>
+
+    <p>
+      <label>Materia *
+        <input name="materia" required>
+      </label>
+    </p>
+
+    <p>
+      <label>Calificación *
+        <input type="number" step="0.1" min="1" max="10" name="calificacion" required>
+      </label>
+    </p>
+
+    <p>* Obligatorio</p>
+
+    <p>
+      <button type="submit">Guardar</button>
+      <button id="eliminar" type="button">Eliminar</button>
+    </p>
+  </form>
+
+  <script type="module">
+    import { descargaVista } from "./js/libs/descargaVista.js";
+    import { submitAccion } from "./js/libs/submitAccion.js";
+    import { accionElimina } from "./js/libs/accionElimina.js";
+
+    const params = new URLSearchParams(location.search);
+    const formulario = document.getElementById("formulario");
+
+    // Cargar datos
+    descargaVista("php/calificacion-vista-modifica.php?" + params);
+
+    // Guardar cambios
+    formulario.addEventListener("submit", (event) =>
+      submitAccion(event, "php/calificacion-modifica.php", formulario, "/index.html", "Editado correctamente")
+    );
+
+    // Eliminar
+    document.getElementById("eliminar").addEventListener("click", () =>
+      accionElimina(
+        "php/calificacion-elimina.php",
+        formulario,
+        "¿Eliminar registro?",
+        "index.html"
+      )
+    );
+  </script>
+
+    
+</body>
+</html>
